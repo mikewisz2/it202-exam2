@@ -4,142 +4,46 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>repl.it</title>
+	<title>it202-exam2 michael wiszowaty</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
 	 crossorigin="anonymous">
-	<style>
-		.template {
-			display: none;
-		}
-    .Pass {color: green;}
-    .Fail {color: red;}
+    <style>
 	</style>
-
 </head>
 
 <body>
-  <form id="filters">
-    <input name="department" type="text" id="department" value="COPA">
-    <select name="results" id="results">
-      <option></option>
-      <option value="Pass">Pass</option>
-      <option value="Fail">Fail</option>
-    </select>
-  </form>
 
 
-  <button id="search">Search</button>
-
+  <ul class="list-group">
+    <li class="list-group-item d-flex justify-content-between align-items-center template">
+      <p> </p>
+      <span class="badge badge-primary badge-pill"> </span>
+    </li>
+  </ul>
+  
   <div id="cards"></div>
 
-	<div class="card template" style="width: 18rem;">
-		<div class="card-body">
-			<h5 class="card-title">Card title</h5>
-			<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-			<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-			<a href="#" class="card-link">Card link</a>
-			<a href="#" class="card-link">Another link</a>
-		</div>
-	</div>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js">
-
-	</script>
-
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js">	</script>
 	<script>
 		$(document).ready(function(){
-
       var endpoint = "https://data.cityofchicago.org/resource/xzkq-xp2w.json?$select=department,count(department)&$group=department";
-
-
-      $("#search").on("click", function() {
-        
-
-        var filterString = $("#filters").serialize();
-        console.log(filterString);
-        
-        
-        
-        // clear the display
-        $("#cards").empty();
-        var searchString = $("#department").val();
-        console.log(searchString);
-        var url = endpoint + "&department=" + searchString;
-        console.log(url);
-
-        var results = $("#results").val();
-        console.log(results);
-
-        if (results != ""){
-          url = url + "&results=" + results;
-          console.log(url);
-        }
-       
-
-
-      $.get(url, function(response) {
+      
+      $.get(endpoint, function(response) {
           console.log(response);
-
-          $("#cards").append("<h2>Your query returned " + response.length + " records.</h2>");
-
-
-          var data = response;
-
-          $.each(data, function(i,v){
-            //console.log(i,v);
-
-            // clone card
-            var clone = $(".template").clone();
-            // update values
-            clone.find(".card-title").text(v.dba_name);
-
-
-
-            clone.find(".card-title").addClass(v.results);
-
-            clone.find(".card-title").attr("data-results", v.results);
-
-            clone.find(".card-subtitle").text(v.facility_type);
-            
-            if (v.violations) {
-              //clone.find(".card-text").text(v.violations);
-            } else {
-              clone.find(".card-text").text("")
-            }
-            
-            
-
-
+          var name = response;
+          $.each(name, function(i,v){
+            var clone = $(".list-group-item.template").clone();
+            clone.find("p").text(v.department)
+            clone.find(".badge").text(v.count_department);
             clone.removeClass("template")
-
-
-            // insert into DOM
-            $("#cards").append(clone);
-
+            $(".list-group").append(clone);
           });
-
-
       })
-
-      });
-
-
-
-
-
+      
+      
     });
 	</script>
 
-
-
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
-	 crossorigin="anonymous">
-
-	</script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
-	 crossorigin="anonymous">
-
-	</script>
-	</script>
 </body>
 
 </html>
